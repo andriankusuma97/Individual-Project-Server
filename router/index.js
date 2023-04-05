@@ -1,6 +1,7 @@
 const router = require('express').Router()
 const registerRouter = require('./registerRouter')
 const loginRouter = require('./loginRouter')
+const errorHendler = require('../middlewares/errorHandler')
 
 
 
@@ -16,7 +17,7 @@ router.use('/login', loginRouter)
 
 
 //ERROR HENDLER
-
+router.use(errorHendler)
 
 
 module.exports = router
