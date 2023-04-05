@@ -5,6 +5,7 @@ var cors = require('cors')
 var morgan = require('morgan')
 const axios = require('axios');
 const {User}= require('./models')
+const router = require('./router')
 
 
 //body parse
@@ -16,8 +17,9 @@ app.use(morgan('dev'))
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
-
+app.use(router)
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
 })
+
