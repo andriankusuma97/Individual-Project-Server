@@ -7,7 +7,7 @@ function hashPassword (password1){
 }
 
 function checkPassword (password,checkPassword){
-  const passwordValidate =bcrypt.compareSync(password, checkPassword)
+  const passwordValidate = bcrypt.compareSync(password, checkPassword)
   return passwordValidate
 }
 
