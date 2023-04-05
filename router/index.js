@@ -3,6 +3,7 @@ const registerRouter = require('./registerRouter')
 const loginRouter = require('./loginRouter')
 const exerciseRouter = require('./exerciseRouter')
 const errorHendler = require('../middlewares/errorHandler')
+const authentication = require('../middlewares/authentication')
 
 
 
@@ -12,7 +13,7 @@ router.use('/login', loginRouter)
 router.use('/exercise', exerciseRouter)
 
 // MIDLEWARE-ACCSEC LOGIN
-
+router.use(authentication)
 
 //ROUTE ACCSES
 
