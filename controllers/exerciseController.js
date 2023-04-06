@@ -74,6 +74,25 @@ class ExerciseController {
       res.status(500).json(error)
     }
   }
+
+  static async getAllKategoriExercise(req,res,next){
+    try {
+      let result = await axios({
+        method: 'GET',
+        url: 'https://exercisedb.p.rapidapi.com/exercises/bodyPartList',
+        headers: {
+          'X-RapidAPI-Key': '54e25aa454msh263d2d6c5cf8f7fp1fc322jsn3eecab5368d0',
+          'X-RapidAPI-Host': 'exercisedb.p.rapidapi.com'
+        }
+      })
+      let newData =result.data.slice(0,10)
+      res.status(200).json(newData)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+
 }
 
 module.exports = ExerciseController
