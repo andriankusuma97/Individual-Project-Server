@@ -8,10 +8,13 @@ router.post('/bmi',ExerciseController.getAlllBmi)
 router.get('/type',ExerciseController.getAllKategoriExercise)
 
 
+
+
 router.use(authentication)
 
-
+router.post('/token',ExerciseController.generateMidtrans)
 router.get('/rekomendasi/:data',ExerciseController.getRekomendasiExercise)
+router.patch('/status',ExerciseController.updateStatus)
 
 
 

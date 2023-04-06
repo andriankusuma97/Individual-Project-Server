@@ -1,5 +1,6 @@
 const { User } = require('../models')
 const axios = require('axios');
+const midtransClient = require('midtrans-client');
 
 class ExerciseController {
   static async getAllExercise(req,res,next){
@@ -33,7 +34,7 @@ class ExerciseController {
         url: 'https://body-mass-index-bmi-calculator.p.rapidapi.com/metric',
         params: {weight, height},
         headers: {
-          'X-RapidAPI-Key': '54e25aa454msh263d2d6c5cf8f7fp1fc322jsn3eecab5368d0',
+          'X-RapidAPI-Key': '880c36d443msh53349d70b6622b5p175726jsn45745424a5f6',
           'X-RapidAPI-Host': 'body-mass-index-bmi-calculator.p.rapidapi.com'
         }
       })
@@ -45,7 +46,7 @@ class ExerciseController {
         url: 'https://body-mass-index-bmi-calculator.p.rapidapi.com/weight-category',
         params: {bmi: `${data_bmi}`},
         headers: {
-          'X-RapidAPI-Key': '54e25aa454msh263d2d6c5cf8f7fp1fc322jsn3eecab5368d0',
+          'X-RapidAPI-Key': '880c36d443msh53349d70b6622b5p175726jsn45745424a5f6',
           'X-RapidAPI-Host': 'body-mass-index-bmi-calculator.p.rapidapi.com'
     }
       })
@@ -91,6 +92,56 @@ class ExerciseController {
       next(error)
     }
   }
+
+  static async updateStatus(req,res,next){
+    try {
+      await User.update(
+        { status:true },
+        {
+          where:{
+            id: req.user.id
+          }
+          
+        }
+      )
+      res.status(200).json(` user with id ${req.user.id} status update success `)
+    } catch (error) {
+      
+    }
+  }
+
+  static async generateMidtrans(req,res,next){
+    try {
+      const findUser = await User.findByPk(req.user.id)
+      if(findUser.status){
+        throw {name: 'already_subscribed'}
+      }
+      let snap = new midtransClient.Snap({
+        // Set to true if you want Production Environment (accept real transaction).
+        isProduction : false,
+        serverKey : process.env.MIDTRANS_SERVER_KEY
+    });
+    let parameter = {
+      transaction_details: {
+        order_id:"TRANSACTION"+ Math.floor(100000 + Math.random() * 90909899),
+        gross_amount: 10000
+      },
+      credit_card:{
+        secure : true
+      },
+      customer_details: {
+          email: findUser.email,
+      }
+    }; 
+      console.log(findUser.email)
+      const midtransToken = await snap.createTransaction(parameter);
+      console.log(midtransToken)
+      res.status(200).json(midtransToken)
+    } catch (error) {
+      next(error)
+    }
+  }
+
 
 
 }

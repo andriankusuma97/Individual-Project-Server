@@ -30,6 +30,10 @@ module.exports = (error,request,response,next)=>{
       status = 401
       message = "invalid email/password"
       break;
+    case "already_subscribed":
+      status = 404
+      message = "Tou already subscribee"
+      break;
     default:
       break;
   }
